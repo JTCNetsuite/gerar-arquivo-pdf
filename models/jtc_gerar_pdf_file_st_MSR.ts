@@ -55,21 +55,23 @@ export const onRequest = (ctx:EntryPoints.Suitelet.onRequestContext) => {
                 }).run().getRange({start: 0, end: 1})
 
                 log.debug("searchFileBoleto", searchFileBoleto)
+                if (searchFileBoleto.length > 0) {
+                    const idFile = String(searchFileBoleto[0].getValue({name: CTS.FOLDER.INTERNALID, join: CTS.FOLDER.TYPE_FILE}))
 
-                const idFile = String(searchFileBoleto[0].getValue({name: CTS.FOLDER.INTERNALID, join: CTS.FOLDER.TYPE_FILE}))
-
-                log.debug('idFile', idFile)
-
-                const contentfile = file.load({id: idFile}).getContents();
-
-                content_body += contentfile + "\n"
-                content_body += "<br></br>"
-                content_body += "<br></br>"
-                content_body += "<br></br>"
-                content_body += "<br></br>"
-                content_body += "<br></br>"
-                content_body += "<br></br>"
-                content_body += "<br></br>"
+                    log.debug('idFile', idFile)
+    
+                    const contentfile = file.load({id: idFile}).getContents();
+    
+                    content_body += contentfile + "\n"
+                    content_body += "<br></br>"
+                    content_body += "<br></br>"
+                    content_body += "<br></br>"
+                    content_body += "<br></br>"
+                    content_body += "<br></br>"
+                    content_body += "<br></br>"
+                    content_body += "<br></br>"
+                }
+                
 
                return true
           })
