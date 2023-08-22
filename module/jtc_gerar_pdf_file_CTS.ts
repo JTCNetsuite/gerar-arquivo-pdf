@@ -23,10 +23,13 @@ export const constantes = {
     CNAB_PARCELA: {
         ID: 'customrecord_dk_cnab_aux_parcela',
         NOSSO_NUMERO: 'custrecord_dk_cnab_nosso_numero',
-        TRANSACTION: 'custrecord_dk_cnab_transacao'
+        TRANSACTION: 'custrecord_dk_cnab_transacao',
+        NF: 'custrecord_dk_cnab_num_titbeneficiario'
 
     },
     INVOICE: {
-        LINK_NF: 'custbody_enl_linknotafiscal'
+        LINK_NF: 'custbody_enl_linknotafiscal',
+        NF: 'custbody_enl_fiscaldocnumber'
+
     }
 }
