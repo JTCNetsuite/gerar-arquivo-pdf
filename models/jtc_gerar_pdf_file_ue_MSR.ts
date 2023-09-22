@@ -10,16 +10,35 @@ import * as https from 'N/https'
 import * as log from 'N/log'
 import * as record from 'N/record';
 import * as search from 'N/search'
+import { EntryPoints } from 'N/types'
+import * as runtime from 'N/runtime'
 
-export const createButton = (form: Form, idTransaction) => {
+export const createButton = (form: Form, idTransaction, ctx: EntryPoints.UserEvent.beforeLoadContext) => {
     try {
-        form.clientScriptModulePath = '../controllers/jtc_func_gerar_pdf_file_CS.js'
+        const curr = ctx.newRecord
+        const impre = curr.getValue(CTS.INVOICE.IMPRESSO)
+        const link = form.getField({id: CTS.INVOICE.LINK_NF})
+        const vi =  form.getField({id: 'custbody_enl_viewdanfe'})
+        
+        
+        
+        if (impre == "T" || impre == true) {
+            const currUSer = runtime.getCurrentUser().role
+            if (currUSer != 3) {
+                link.updateDisplayType({displayType: "HIDDEN"})
+                vi.updateDisplayType({displayType: "HIDDEN"})
+            }
+        } else {
+            form.clientScriptModulePath = '../controllers/jtc_func_gerar_pdf_file_CS.js'
+            form.addButton({
+                id: CTS.FORM.BUTTON_PDF.ID,
+                label: CTS.FORM.BUTTON_PDF.LABEL,
+                functionName: "gerarArquivo("+idTransaction +")"
+            })
+        }  
+        
 
-        form.addButton({
-            id: CTS.FORM.BUTTON_PDF.ID,
-            label: CTS.FORM.BUTTON_PDF.LABEL,
-            functionName: "gerarArquivo("+idTransaction +")"
-        })
+        
 
     } catch (error) {
         log.error('jtc_gerar_pdf_file_ue_MSR.createButton', error)
@@ -31,13 +50,19 @@ export const createButton = (form: Form, idTransaction) => {
 export const gerarArquivo = (idTransaction) => {
 
     try {
-        const recordInvoice = record.load({
-            type: record.Type.INVOICE,
-            id: idTransaction
+        
+        const fieldsSearch = search.lookupFields({
+            id: idTransaction,
+            type: search.Type.INVOICE,
+            columns: [
+                CTS.INVOICE.LINK_NF,
+                CTS.INVOICE.NF
+            ]
         })
+   
 
-        const urlNF = recordInvoice.getValue(CTS.INVOICE.LINK_NF)
-        const nf = recordInvoice.getValue(CTS.INVOICE.NF)
+        const urlNF = fieldsSearch.custbody_enl_linknotafiscal
+        const nf = fieldsSearch.custbody_enl_fiscaldocnumber
 
         const searchXML = search.create({
             type: search.Type.FOLDER,
@@ -72,7 +97,6 @@ export const gerarArquivo = (idTransaction) => {
             name: CTS.FOLDER.URL,
             join: CTS.FOLDER.TYPE_FILE
         })
-        
         console.log(responseSuielet.body)
         window.open(`${url_prod}${responseSuielet.body}`, '_blank');
 
@@ -83,8 +107,6 @@ export const gerarArquivo = (idTransaction) => {
         sleep(1000)
 
         window.open(`${url_prod}${urlxmlNf}&_xd=T`, '_blank')
-
-        
 
     } catch (error) {
         console.log('jtc_gerar_pdf_file_ue_MSR.gerarArquivo',error)

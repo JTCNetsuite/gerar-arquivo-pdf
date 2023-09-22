@@ -9,6 +9,7 @@ import * as log from 'N/log'
 import * as file from 'N/file'
 import * as search from 'N/search'
 import {constantes as CTS} from '../module/jtc_gerar_pdf_file_CTS'
+import * as record from 'N/record'
 
 
 
@@ -18,6 +19,13 @@ export const onRequest = (ctx:EntryPoints.Suitelet.onRequestContext) => {
           const BODY = JSON.parse(ctx.request.body)
           const idTransaction = BODY.id
           log.debug('dTransaction', idTransaction)
+
+        record.submitFields({
+            id:idTransaction, type: record.Type.INVOICE, values: {custbody_jtc_impresso_files: true},
+            options: {
+                ignoreMandatoryFields: true
+            }
+        })
 
 
           let content_body = ''

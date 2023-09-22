@@ -29,7 +29,8 @@ export const constantes = {
     },
     INVOICE: {
         LINK_NF: 'custbody_enl_linknotafiscal',
-        NF: 'custbody_enl_fiscaldocnumber'
+        NF: 'custbody_enl_fiscaldocnumber',
+        IMPRESSO: "custbody_jtc_impresso_files"
 
     }
 }

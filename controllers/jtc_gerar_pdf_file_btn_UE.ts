@@ -10,7 +10,7 @@ import * as log from 'N/log'
 export const beforeLoad: EntryPoints.UserEvent.beforeLoad = (ctx: EntryPoints.UserEvent.beforeLoadContext) => {
     try {
         if (ctx.type == ctx.UserEventType.VIEW) {
-            MSR.createButton(ctx.form, ctx.newRecord.id)
+            MSR.createButton(ctx.form, ctx.newRecord.id, ctx)
         }
     } catch (e) {
         log.error('jtc_gerar_pdf_file_btn_UE.beforeLoad', e)
