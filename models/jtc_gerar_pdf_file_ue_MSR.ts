@@ -19,15 +19,15 @@ export const createButton = (form: Form, idTransaction, ctx: EntryPoints.UserEve
         const impre = curr.getValue(CTS.INVOICE.IMPRESSO)
         const link = form.getField({id: CTS.INVOICE.LINK_NF})
         const vi =  form.getField({id: 'custbody_enl_viewdanfe'})
+        const subsidiary = curr.getValue("subsidiary")
         
         
-        
-        if (impre == "T" || impre == true) {
-            const currUSer = runtime.getCurrentUser().role
-            if (currUSer != 3) {
-                link.updateDisplayType({displayType: "HIDDEN"})
-                vi.updateDisplayType({displayType: "HIDDEN"})
-            }
+        if ((impre == "T" || impre == true) && subsidiary == 3) {
+            // const currUSer = runtime.getCurrentUser().role
+            // if (currUSer != 3) {
+            //     link.updateDisplayType({displayType: "HIDDEN"})
+            //     vi.updateDisplayType({displayType: "HIDDEN"})
+            // }
         } else {
             form.clientScriptModulePath = '../controllers/jtc_func_gerar_pdf_file_CS.js'
             form.addButton({
