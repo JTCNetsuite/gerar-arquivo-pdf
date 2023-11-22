@@ -11,7 +11,7 @@ import * as search from 'N/search'
 import {constantes as CTS} from '../module/jtc_gerar_pdf_file_CTS'
 import * as record from 'N/record'
 import * as format from 'N/format'
-
+import * as https from 'N/https'
 
 
 
@@ -43,18 +43,13 @@ export const onRequest = (ctx:EntryPoints.Suitelet.onRequestContext) => {
                const id = res.id
                
                content_body += bankSlipHTML(id, num)
-
-               content_body += "<br></br>"
-               content_body += "<br></br>"
-               content_body += "<br></br>"
-               content_body += "<br></br>"
-               content_body += "<br></br>"
-               content_body += "<br></br>"
-               content_body += "<br></br>"
+               
                num += 1 
 
                return true
           })
+          content_body += "</div></body>"
+          content_body += "</html>"
 
           log.debug("content_body", content_body)
 
@@ -278,24 +273,35 @@ const bankSlipHTML = (idRec: string | number, num: number) =>  {
         bankSlip += "<label style=\"font-size: 9px;\">Código de Barras</label>"
         bankSlip += "<p style= \"font-family: Arial, Helvetica, sans-serif; font-size: 15px; font-weight: bold;\"> <br></p>"
         bankSlip += "<barcode codetype=\"code128\" showtext=\"'" + digitableLine.toString() + "'\"/>" //*atenção ao barcode
-
+        const url = 'https://barcodes.pro/get/generator?f=svg&s=itf14&d='+barsCode+'&cm=url%28%23black%29&sf=0.9&sy=0.5&ts=10&th=10'
+        const requesp = https.get({url: url})
+        bankSlip += requesp.body
         //* bankSlip += "<barcode codetype=\"code128\" showtext=\"false\" height=\"15px\" width=\"420px\" value=\"" + barsCode + "\"/>" //*atenção ao barcode
-        bankSlip += "<svg id=\"barcode"+num+"\" ></svg>"
+        // bankSlip += "<svg id=\"barcode"+num+"\" ></svg>"
         bankSlip += "<script>"
-        bankSlip += "JsBarcode(\"#barcode"+num+"\",'" + digitableLine.toString() + "', {"
-        bankSlip += "format: \"CODE128\" ,"
-        bankSlip += "displayValue: true,"
-        bankSlip += "width: 1.5,"
-        bankSlip += "height: 40,"
-        bankSlip += "fontSize: 15,"
-        bankSlip += "margin: 15"
-        bankSlip += "})"
+        // bankSlip += "JsBarcode(\"#barcode"+num+"\",'" + digitableLine.toString() + "', {"
+        // bankSlip += "format: \"CODE128\" ,"
+        // bankSlip += "displayValue: true,"
+        // bankSlip += "width: 1.48,"
+        // bankSlip += "height: 41,"
+        // bankSlip += "fontSize: 15,"
+        // bankSlip += "font: 'arial',"
+        // bankSlip += "margin: 15"
+        // bankSlip += "})"
         bankSlip += "</script >"
         bankSlip += "</td></tr>"
-
         bankSlip += "</table>"
-        bankSlip += "</div></body>"
-        bankSlip += "</html>"
+        bankSlip += "<br></br>"
+        bankSlip += "<br></br>"
+        bankSlip += "<br></br>"
+        bankSlip += "<br></br>"
+        bankSlip += "<br></br>"
+        bankSlip += "<br></br>"
+        bankSlip += "<br></br>"
+        bankSlip += "<br></br>"
+        bankSlip += "<br></br>"
+        bankSlip += "<br></br>"
+        
 
         return bankSlip
 
